@@ -45,7 +45,7 @@ profileRouter.post("/api/update-profile", auth, async  (req, res) =>{
 
     const {username, bio, image}  = req.body;
 
-    // //^ check username exist or not
+    //^ check username exist or not
     let profileExist = await Profile.findOne({ "userId": req.userid });
 
     if(!profileExist){
@@ -56,7 +56,6 @@ profileRouter.post("/api/update-profile", auth, async  (req, res) =>{
     }
 
     try {
-        
         //^ Update the profile fields
         if(profileExist.username != username){
             const isUserNameExist = await Profile.findOne({ username });
@@ -86,8 +85,18 @@ profileRouter.post("/api/update-profile", auth, async  (req, res) =>{
 //& get user profile
 profileRouter.get("/api/profile", auth, async  (req, res) =>{
     try {
+
+        let profileExist = await Profile.findOne({ "userId": req.userid });
+
+        if(!profileExist){
+            return res.status(400).json({ 
+                status: 400,
+                msg: "Profile not found !"
+            });
+        }
+        
         res.status(200).json({ 
-            user_id: req.userid
+            profile: profileExist
         });
     } catch (error) {
         res.status(500).json({ error: error.message });

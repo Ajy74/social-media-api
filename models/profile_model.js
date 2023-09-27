@@ -24,9 +24,11 @@ const profileSchema = mongoose.Schema({
     },
     followCount: {
         type: Number,
+        default: 0
     },
     followingCount: {
-        type: Number
+        type: Number,
+        default: 0
     }
 });
 
