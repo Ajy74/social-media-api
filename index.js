@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 //& imports from other file
 const authRouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
+const followRouter = require("./routes/follow");
 
 //& initialization
 const PORT = 4000;
@@ -16,6 +17,7 @@ const DATABASE = "mongodb+srv://mouryaajay7463:ajay123@cluster0.wiiwbjx.mongodb.
 app.use(express.json());
 app.use(authRouter);
 app.use(profileRouter);
+app.use(followRouter);
 
 
 
