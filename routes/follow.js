@@ -6,7 +6,7 @@ const followRouter = express.Router();
 
 
 //& update follow & following api
-followRouter.get("/api/follow", auth, async (req, res)=>{
+followRouter.get("/api/follow", auth, async (req, res) => {
     const { friendId } = req.query;
 
     try {

@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const authRouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
 const followRouter = require("./routes/follow");
+const postRouter = require("./routes/posts");
 
 //& initialization
 const PORT = 4000;
@@ -18,6 +19,9 @@ app.use(express.json());
 app.use(authRouter);
 app.use(profileRouter);
 app.use(followRouter);
+app.use(postRouter);
+
+app.use(express.urlencoded({ extended: false}));
 
 
 
