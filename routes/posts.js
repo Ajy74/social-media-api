@@ -45,6 +45,7 @@ postRouter.post("/api/new-post", auth, upload, async(req, res) =>{
         // console.log(req.file); //^...it will print file details for single file
         // console.log(req.file.path); //^...it will print file path for single file
         
+        //^ Check for post type 
         if (String(type) !== "image" && String(type) !== "video" && String(type) !== "sponsor") {
             return res.status(400).json({
                 status: 400,
@@ -69,7 +70,7 @@ postRouter.post("/api/new-post", auth, upload, async(req, res) =>{
             type,
             desc,
             tags,
-            url: postLinks // Store array of file links in the 'url' field
+            url: postLinks 
         });
         newPost = await newPost.save();
         
@@ -86,6 +87,36 @@ postRouter.post("/api/new-post", auth, upload, async(req, res) =>{
         res.status(500).json({ error: error.message });
     }
 });
+
+
+//& delete post 
+postRouter.get("/api/delete-post", auth, async (req, res) =>{
+    const { postId } = req.query;
+
+    try {
+        let existingPost = await Post.findByIdAndDelete(postId);
+
+        if (!existingPost) {
+            return res.status(400).json({
+                status: 400,
+                msg: "Post not found!"
+            });
+        }
+
+        //^ updating post count of current user
+        let userprofile = await Profile.findOne({ userId: req.userid });
+        userprofile.postCount -= 1;
+        userprofile = await userprofile.save();
+        
+        res.status(200).json({
+            status: 200,
+            msg:"post was deleted succesfully"
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 
 module.exports = postRouter;
 
