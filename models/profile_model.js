@@ -14,6 +14,10 @@ const profileSchema = mongoose.Schema({
         trim: true,
         unique: true
     },
+    originalName:{
+        type: String,
+        trim: true,
+    },
     bio: {
         type: String,
         required: true,
