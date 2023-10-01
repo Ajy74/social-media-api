@@ -19,25 +19,43 @@ const upload = multer({
     })
 }).single("image");
 
+//& middleware check for user profile already created or not for update profile image
+const updateProfile = async (req, res, next) => {
+    try {
+        //^ check username exist or not
+        let profileExist = await Profile.findOne({ "userId": req.userid });
+
+        if(!profileExist){
+            res.status(200).json({ 
+                status:200,
+                msg: " User has already created profile !"
+            });
+        }
+        else{
+            req.userProfile = profileExist;
+            next();
+        }
+ 
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
 //& update profile image
-profileRouter.post("/api/profile-image", auth, upload, async(req, res) =>{
+profileRouter.post("/api/profile-image", auth, updateProfile, upload, async(req, res) =>{
 
     try {
 
-        console.log(req.file); //^...it will print file details for single file
+        // console.log(req.file); //^...it will print file details for single file
         
         const imageLinks = `https://example.com/uploads/profiles/${req.file.filename}`;
 
-        //^  profile modeltype
-        let newProfile = new Profile({
-            image: imageLinks,
-        });
-
         //^ save new profile image to databse
-        newProfile = await  newProfile.save();
+        req.userProfile.image = imageLinks ;
+        req.userProfile = await  req.userProfile.save();
 
         res.status(200).json({ 
-            profile: newProfile
+            profile: req.userProfile
         });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -169,6 +187,7 @@ profileRouter.get("/api/profile", auth, async  (req, res) =>{
 profileRouter.get("/api/delete-account", auth, async (req, res) =>{
     
     try {
+        
         let existingUser = await User.findByIdAndDelete(req.userid);
         if (!existingUser) {
             return res.status(500).json({
@@ -177,7 +196,7 @@ profileRouter.get("/api/delete-account", auth, async (req, res) =>{
             });
         }
 
-        let existingProfile = await Profile.findByIdAndDelete({ "userId":req.userid });
+        let existingProfile = await Profile.findOneAndDelete({ "userId":req.userid });
         if (!existingProfile) {
             return res.status(500).json({
                 status: 500,
