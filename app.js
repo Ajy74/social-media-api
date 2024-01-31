@@ -1,3 +1,4 @@
+require("dotenv").config();
 //& imports
 const express = require("express");
 const mongoose = require("mongoose");
@@ -10,7 +11,7 @@ const postRouter = require("./routes/posts");
 const searchRouter = require("./routes/search");
 
 //& initialization
-const PORT = 4000;
+const PORT = process.env.PORT ||4000;
 const app = express();
 const DATABASE = "mongodb+srv://mouryaajay7463:ajay123@cluster0.wiiwbjx.mongodb.net/?retryWrites=true&w=majority";
 
