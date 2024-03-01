@@ -13,7 +13,7 @@ const searchRouter = require("./routes/search");
 //& initialization
 const PORT = process.env.PORT ||4000;
 const app = express();
-const DATABASE = "mongodb+srv://mouryaajay7463:ajay123@cluster0.wiiwbjx.mongodb.net/?retryWrites=true&w=majority";
+const DATABASE = "mongodb+srv://mouryaajay7463:<password>@cluster0.wiiwbjx.mongodb.net/?retryWrites=true&w=majority";
 
 
 //& middleware 
